@@ -3,19 +3,25 @@ from recording import app
 from flask import render_template,Response,redirect,url_for,request,flash
 import cv2
 import time
-
+import os
 global term
 term=True
 
 
 def video_frames():
-    camera=cv2.VideoCapture(0)
+    try:
+        camera=cv2.VideoCapture(0)
+    except:
+        print('Camera is not avaible')
+        return 
     frame_width = int(camera.get(3))
     frame_height = int(camera.get(4))
     size = (frame_width, frame_height)
     fgbg = cv2.createBackgroundSubtractorMOG2()
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    name = "C://Users//riya//Desktop//tutorial//project//recordingapp//recordedvideo//video.avi"
+    root='C:/Users/riya/desktop/tutorial/project/recordingapp/recordedvideo'
+    count=len([file for file in os.listdir(root)])
+    name = f"C://Users//riya//Desktop//tutorial//project//recordingapp//recordedvideo//video{count+1}.avi"
     result = cv2.VideoWriter(name,fourcc, 10,size)
     
     starttime=time.time()
